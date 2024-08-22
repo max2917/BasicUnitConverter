@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import UnitComponent from "./UnitComponent";
 
 interface Unit {
   name: string;
@@ -114,25 +115,140 @@ function UnitConverter() {
   };
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(200px,1fr))",
-        gap: "10px", // vertical spacing
-      }}
-    >
-      {units.map((unit) => (
-        <div key={unit.name} style={{ display: "flex", alignItems: "center" }}>
-          <span style={{ marginRight: "5px" }}>{unit.name}:</span>
-          <input
-            type="number"
-            name={unit.name}
-            value={unit.value}
-            onChange={handleInputChange}
-            style={{ width: "100%" }}
-          />
+    // <div
+    //   style={{
+    //     display: "grid",
+    //     gridTemplateColumns: "repeat(auto-fit, minmax(200px,1fr))",
+    //     gap: "10px", // vertical spacing
+    //   }}
+    // >
+    // {/* {units.map((unit) => (
+    //   <div key={unit.name} style={{ display: "flex", alignItems: "center" }}>
+    //     <span style={{ marginRight: "5px" }}>{unit.name}:</span>
+    //     <input
+    //       type="number"
+    //       name={unit.name}
+    //       value={unit.value}
+    //       onChange={handleInputChange}
+    //       style={{ width: "100%" }}
+    //     />
+    //   </div>
+    // ))} */}
+
+    // <>
+    //   {units.map((unit) => (
+    //     <>{UnitComponent(unit.name, unit.value, handleInputChange)}</>
+    //   ))}
+    // </>
+
+    <div style={{ display: "grid", gap: "10px" }}>
+      <div style={{ display: "flex", alignContent: "center" }}>
+        <span style={{ marginRight: "5px" }}>{units[0].name}: </span>
+        <input
+          type="number"
+          name={units[0].name}
+          value={units[0].value}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignContent: "center",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignContent: "center",
+            gap: "10px",
+          }}
+        >
+          <div style={{ display: "flex", alignContent: "center" }}>
+            <span style={{ marginRight: "5px" }}>{units[1].name}: </span>
+            <input
+              type="number"
+              name={units[1].name}
+              value={units[1].value}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div style={{ display: "flex", alignContent: "center" }}>
+            <span style={{ marginRight: "5px" }}>{units[2].name}: </span>
+            <input
+              type="number"
+              name={units[2].name}
+              value={units[2].value}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div style={{ display: "flex", alignContent: "center" }}>
+            <span style={{ marginRight: "5px" }}>{units[3].name}: </span>
+            <input
+              type="number"
+              name={units[3].name}
+              value={units[3].value}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div style={{ display: "flex", alignContent: "center" }}>
+            <span style={{ marginRight: "5px" }}>{units[4].name}: </span>
+            <input
+              type="number"
+              name={units[4].name}
+              value={units[4].value}
+              onChange={handleInputChange}
+            />
+          </div>
         </div>
-      ))}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignContent: "center",
+            gap: "10px",
+          }}
+        >
+          <div style={{ display: "flex", alignContent: "center" }}>
+            <span style={{ marginRight: "5px" }}>{units[5].name}: </span>
+            <input
+              type="number"
+              name={units[5].name}
+              value={units[5].value}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div style={{ display: "flex", alignContent: "center" }}>
+            <span style={{ marginRight: "5px" }}>{units[6].name}: </span>
+            <input
+              type="number"
+              name={units[6].name}
+              value={units[6].value}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div style={{ display: "flex", alignContent: "center" }}>
+            <span style={{ marginRight: "5px" }}>{units[7].name}: </span>
+            <input
+              type="number"
+              name={units[7].name}
+              value={units[7].value}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div style={{ display: "flex", alignContent: "center" }}>
+            <span style={{ marginRight: "5px" }}>{units[8].name}: </span>
+            <input
+              type="number"
+              name={units[8].name}
+              value={units[8].value}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
