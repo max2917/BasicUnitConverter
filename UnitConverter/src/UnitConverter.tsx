@@ -1,73 +1,93 @@
-// import styles from "./Unit.css";
-
-// function Unit(name: String) {
-//   return (
-//     <>
-//       <div
-//         style={{
-//           display: "flex",
-//           alignItems: "center",
-//           columnGap: "20px",
-//           fontSize: "20px",
-//           width: "600px",
-//         }}
-//       >
-//         <h2 style={{ justifyContent: "left" }}>{name}</h2>
-//         <textarea
-//           style={{
-//             justifyContent: "right",
-//             resize: "none",
-//             borderRadius: "8px",
-//             borderWidth: "2px",
-//             borderColor: "#213547",
-//           }}
-//         />
-//       </div>
-//     </>
-//   );
-// }
-
-// export default Unit;
-
 import React, { useState, useEffect } from "react";
 
 interface Unit {
   name: string;
   value: number;
-  factor: number;
 }
 
 const units: Unit[] = [
-  { name: "MPGe", value: 33.71, factor: 33.71 },
-  { name: "Wh/mi", value: 1000, factor: 1000 },
-  { name: "kWh/mi", value: 1, factor: 1 },
-  { name: "kWh/100mi", value: 100, factor: 100 },
-  { name: "mi/kWh", value: 1, factor: 1 },
-  { name: "Wh/km", value: 1000 / 1.609344, factor: 1000 / 1.609344 },
-  { name: "kWh/km", value: 1 / 1.609344, factor: 1 / 1.609344 },
-  { name: "kWh/100km", value: 100 / 1.609344, factor: 100 / 1.609344 },
-  { name: "km/kWh", value: 1 / 1.609344, factor: 1 / 1.609344 },
-];
+  { name: "MPGe", value: 33.71 },
 
-// Convert the current selection to mi/kWh then call ToAllElse() to handle the rest of the table
+  { name: "mi/kWh", value: 1 },
+  { name: "Wh/mi", value: 47.6 },
+  { name: "kWh/mi", value: 1 },
+  { name: "kWh/100mi", value: 100 },
+
+  { name: "km/kWh", value: 1 / 1.609344 },
+  { name: "Wh/km", value: 1000 / 1.609344 },
+  { name: "kWh/km", value: 1 / 1.609344 },
+  { name: "kWh/100km", value: 100 / 1.609344 },
+];
+const KilometerInAMile = 1.60934;
+
+// Convert the current input to mi/kWh to then convert to all other values
 function ToMikWh(event: React.ChangeEvent<HTMLInputElement>) {
-  // Find the factor for whatever unit it is we have
-  const foundUnit = units.find((unit) => unit.name === event.target.name);
-  if (foundUnit) {
-    // Then convert it to mi/kWh and use that to convert the rest
-    const mikWh = Number(event.target.value) / foundUnit.factor;
-    ToAllElse(mikWh);
+  if (!Number.isNaN(event.target.value)) {
+    switch (event.target.name) {
+      case units[0].name: // MPGe
+        ToAllElse(Number(event.target.value) / 33.71);
+        break;
+      case units[1].name: // mi/kWh, really shouldn't come here but handle it gracefully
+        ToAllElse(Number(event.target.value));
+        break;
+      case units[2].name: // Wh/mi
+        ToAllElse(1000 / Number(event.target.value));
+        break;
+      case units[3].name: // kWh/mi
+        ToAllElse(1 / Number(event.target.value));
+        break;
+      case units[4].name: // kWh/100mi
+        ToAllElse(100 / Number(event.target.value));
+        break;
+      case units[5].name: // km/kWh
+        ToAllElse(Number(event.target.value) / KilometerInAMile);
+        break;
+      case units[6].name: // Wh/km
+        ToAllElse((1000 * KilometerInAMile) / Number(event.target.value));
+        break;
+      case units[7].name: // kWh/km
+        ToAllElse(KilometerInAMile / Number(event.target.value));
+        break;
+      case units[8].name: // kWh/100km
+        ToAllElse(100 / (KilometerInAMile * Number(event.target.value)));
+        break;
+      default:
+        return;
+    }
   }
-  ToAllElse(0); // something went terribly wrong
 }
 
-// Covert all other values using factors from base mi/kWh and its current value
+// Covert all other values based on a known mi/kWh factor
 function ToAllElse(mikWhValue: number) {
+  units[1].value = mikWhValue;
   units.find((unit) => {
     switch (unit.name) {
-      case "MPGe":
+      // TODO: if unit.name is selected, return
+      case units[0].name: // MPGe
+        unit.value = mikWhValue * 33.71;
+        break;
+      case units[2].name: // Wh/mi
+        unit.value = (1 / mikWhValue) * 1000;
+        break;
+      case units[3].name: // kWh/mi
+        unit.value = 1 / mikWhValue;
+        break;
+      case units[4].name: // kWh/100mi
+        unit.value = (1 / mikWhValue) * 100;
+        break;
+      case units[5].name: // km/kWh
+        unit.value = mikWhValue * KilometerInAMile;
+        break;
+      case units[6].name: // Wh/km
+        unit.value = (1000 / mikWhValue) * KilometerInAMile;
+        break;
+      case units[7].name: // kWh/km
+        unit.value = KilometerInAMile / mikWhValue;
+        break;
+      case units[8].name: // kWh/100km
+        unit.value = 100 / KilometerInAMile / mikWhValue;
+        break;
     }
-    unit.value = mikWhValue * unit.factor;
   });
   return;
 }
@@ -94,15 +114,22 @@ function UnitConverter() {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(200px,1fr))",
+        gap: "10px", // vertical spacing
+      }}
+    >
       {units.map((unit) => (
-        <div key={unit.name} style={{ display: "flex" }}>
-          <span>{unit.name}:</span>
+        <div key={unit.name} style={{ display: "flex", alignItems: "center" }}>
+          <span style={{ marginRight: "5px" }}>{unit.name}:</span>
           <input
             type="number"
             name={unit.name}
-            value={unit.value.toFixed(2)}
+            value={unit.value}
             onChange={handleInputChange}
+            style={{ width: "100%" }}
           />
         </div>
       ))}
